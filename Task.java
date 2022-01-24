@@ -92,7 +92,7 @@ public class Task implements Serializable {
     private void setStartDate() throws IOException {
         System.out.print("Введите дату создания задачи в формате год, месяц, день (Пример: 2022, 1, 17): ");
         String str = reader.readLine();
-        String[] date = str.split(", ");
+        String[] date = str.split(",//s* ");
         int year = Integer.parseInt(date[0]);
         int month = Integer.parseInt(date[1]);
         int day = Integer.parseInt(date[2]);
