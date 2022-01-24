@@ -4,6 +4,8 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -56,6 +58,39 @@ public class Task implements Serializable {
         return taskList;
     }
 
+    public static void sortListByExecutor(List<Task> list) {
+        list.sort(taskExecutorComparator);
+    }
+
+    public static void sortListByName(List<Task> list) {
+        list.sort(taskNameComparator);
+    }
+
+    public static void sortListByPriority(List<Task> list) {
+        list.sort(taskPriorityComparator);
+    }
+
+//    @Override
+//    public int compare(Task o1, Task o2) {
+//        return 0;
+//    }
+//
+//    private static class TaskExecutorComparator implements Comparator<Task> {
+//
+//        @Override
+//        public int compare(Task o1, Task o2) {
+//            return o1.getExecutor().compareTo(o2.getExecutor());
+//        }
+//    }
+
+//    private static class TaskNameComparator implements Comparator<Task> {
+//
+//        @Override
+//        public int compare(Task o1, Task o2) {
+//            return o1.getName().compareTo(o2.getName());
+//        }
+//    }
+
     public static void saveToFile(String name) throws IOException {
         String dirName = System.getProperty("user.dir");
         String fullName = dirName + "\\" + name;
@@ -92,7 +127,7 @@ public class Task implements Serializable {
     private void setStartDate() throws IOException {
         System.out.print("Введите дату создания задачи в формате год, месяц, день (Пример: 2022, 1, 17): ");
         String str = reader.readLine();
-        String[] date = str.split(",//s* ");
+        String[] date = str.split(",//s*");
         int year = Integer.parseInt(date[0]);
         int month = Integer.parseInt(date[1]);
         int day = Integer.parseInt(date[2]);
@@ -109,6 +144,7 @@ public class Task implements Serializable {
         System.out.print("Введите имя исполнителя: ");
         executor = reader.readLine();
     }
+
 
 
     public enum Priority {
@@ -135,4 +171,34 @@ public class Task implements Serializable {
         String formattedString = date.format(formatter);
         return formattedString;
     }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public String getExecutor() {
+        return executor;
+    }
+
+    public void setExecutor(String executor) {
+        this.executor = executor;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    private static final Comparator<Task> taskExecutorComparator =
+            Comparator.comparing(Task::getExecutor);
+
+    private static final Comparator<Task> taskNameComparator =
+            Comparator.comparing(Task::getName);
+
+    private static final Comparator<Task> taskPriorityComparator =
+            Comparator.comparing(Task::getPriority).reversed();
 }
+

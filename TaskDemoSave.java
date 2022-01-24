@@ -17,15 +17,30 @@ public class TaskDemoSave {
             System.out.println("\nЛист задач после инициализации\n\t=======================\n");
             tasks.forEach(System.out::println);
 
-            // установим флажок isDone для 2 задачи в списке в положение true
-            Task taskToRemove = tasks.get(1);
-            taskToRemove.setDone(true);
-            // удалим выполненную задачу из списка
-            taskToRemove.closeTheTask();
-            System.out.println("Лист задач после выполнения одной из задач\n\t=======================\n");
+            System.out.println("Сортировка по ИСПОЛНИТЕЛЮ");
+            Task.sortListByExecutor(tasks);
+
             tasks.forEach(System.out::println);
 
-            Task.saveToFile("saveTask.ser");
+            System.out.println("Сортировка по ПРИОРИТЕТУ");
+            Task.sortListByPriority(tasks);
+
+            tasks.forEach(System.out::println);
+
+            System.out.println("Сортировка по НАЗВАНИЮ ЗАДАЧИ");
+            Task.sortListByName(tasks);
+
+            tasks.forEach(System.out::println);
+
+            // установим флажок isDone для 2 задачи в списке в положение true
+//            Task taskToRemove = tasks.get(1);
+//            taskToRemove.setDone(true);
+//            // удалим выполненную задачу из списка
+//            taskToRemove.closeTheTask();
+//            System.out.println("Лист задач после выполнения одной из задач\n\t=======================\n");
+//            tasks.forEach(System.out::println);
+
+            //Task.saveToFile("saveTask.ser");
 
         } catch (IOException e) {
             e.printStackTrace();
