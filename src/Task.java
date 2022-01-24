@@ -1,10 +1,7 @@
-package com.JavaStep.Homeworks;
-
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -13,6 +10,7 @@ public class Task implements Serializable {
 
     private static List<Task> taskList = new ArrayList<>();
     private static BufferedReader reader;
+    private static int idSequence = 0;
 
     private String name;
     private String description;
@@ -21,6 +19,9 @@ public class Task implements Serializable {
     private LocalDate endDate;
     private String executor;
     private boolean isDone;
+
+    private int id;
+
 
     public static Task createTask() throws IOException {
         Task task = new Task();
@@ -33,6 +34,7 @@ public class Task implements Serializable {
         task.setEndDate();
         task.setExecutor();
         task.isDone = false;
+        task.id = ++idSequence;
 
         taskList.add(task);
 
@@ -50,6 +52,7 @@ public class Task implements Serializable {
 
     public void closeTheTask() {
         if (isDone) {
+            System.out.printf("Задача %s id = %d выполнена, удаляем ее из списка задач\n", this.name, this.id);
             taskList.remove(this);
         }
     }
@@ -62,7 +65,7 @@ public class Task implements Serializable {
         list.sort(taskExecutorComparator);
     }
 
-    public static void sortListByName(List<Task> list) {
+    public static void sortListByTaskName(List<Task> list) {
         list.sort(taskNameComparator);
     }
 
@@ -70,26 +73,6 @@ public class Task implements Serializable {
         list.sort(taskPriorityComparator);
     }
 
-//    @Override
-//    public int compare(Task o1, Task o2) {
-//        return 0;
-//    }
-//
-//    private static class TaskExecutorComparator implements Comparator<Task> {
-//
-//        @Override
-//        public int compare(Task o1, Task o2) {
-//            return o1.getExecutor().compareTo(o2.getExecutor());
-//        }
-//    }
-
-//    private static class TaskNameComparator implements Comparator<Task> {
-//
-//        @Override
-//        public int compare(Task o1, Task o2) {
-//            return o1.getName().compareTo(o2.getName());
-//        }
-//    }
 
     public static void saveToFile(String name) throws IOException {
         String dirName = System.getProperty("user.dir");
@@ -127,7 +110,7 @@ public class Task implements Serializable {
     private void setStartDate() throws IOException {
         System.out.print("Введите дату создания задачи в формате год, месяц, день (Пример: 2022, 1, 17): ");
         String str = reader.readLine();
-        String[] date = str.split(",//s*");
+        String[] date = str.split("[,.]\\s*");
         int year = Integer.parseInt(date[0]);
         int month = Integer.parseInt(date[1]);
         int day = Integer.parseInt(date[2]);
@@ -146,7 +129,6 @@ public class Task implements Serializable {
     }
 
 
-
     public enum Priority {
         LOW_PRIORITY,
         MEDIUM_PRIORITY,
@@ -156,7 +138,7 @@ public class Task implements Serializable {
     @Override
     public String toString() {
         return "Task{" +
-                "\nЗадача: '" + name + '\'' +
+                "\nЗадача: '" + name + "\' " + "id = " + id +
                 "\nОписание задачи: '" + description + '\'' +
                 "\nПриоритет: " + priority +
                 "\nДата создания: " + dateFormat(startDate) +
@@ -192,11 +174,12 @@ public class Task implements Serializable {
         return name;
     }
 
+
     private static final Comparator<Task> taskExecutorComparator =
             Comparator.comparing(Task::getExecutor);
 
     private static final Comparator<Task> taskNameComparator =
-            Comparator.comparing(Task::getName);
+            Comparator.comparing(Task::getName, String.CASE_INSENSITIVE_ORDER);
 
     private static final Comparator<Task> taskPriorityComparator =
             Comparator.comparing(Task::getPriority).reversed();

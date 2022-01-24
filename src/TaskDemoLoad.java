@@ -1,5 +1,3 @@
-package com.JavaStep.Homeworks;
-
 import java.io.IOException;
 import java.util.List;
 
